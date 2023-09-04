@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "bboxes-to-segmentation-with-sam"
+version = "0.1.0"
+description = ""
+authors = ["pvb <pvbabich23@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+segment-anything = {git = "https://github.com/facebookresearch/segment-anything.git"}
+opencv-python = "^4.8.0.76"
+numpy = "^1.25.2"
+torch = { url = "https://download.pytorch.org/whl/cu117/torch-2.0.1%2Bcu117-cp311-cp311-linux_x86_64.whl"}
+torchvision = { url = "https://download.pytorch.org/whl/cu117/torchvision-0.15.2%2Bcu117-cp311-cp311-linux_x86_64.whl"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
