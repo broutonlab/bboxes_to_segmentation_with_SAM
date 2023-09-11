@@ -3,9 +3,10 @@
 This repo contains code to convert YOLO detection dataset (xywh-format) to YOLO segmentation dataset. The code works on Linux.
 
 For conversion, the Segment Anything Model from Meta is used. Here original repo https://github.com/facebookresearch/segment-anything
-
-<img src="./images/cat0_boxed.png" alt="drawing" width="300"/>
-<img src="./images/cat0_contoured.png" alt="drawing" width="300"/>
+<div align="center">
+    <img src="./images/cat0_boxed.png" alt="drawing" width="300"/>
+    <img src="./images/cat0_contoured.png" alt="drawing" width="300"/>
+</div>
 
 # Requirements
 
@@ -35,8 +36,16 @@ The checkpoint for the model can be obtained from this link https://github.com/f
 
 # Some more examples
 
-<img src="./images/cat1_boxed.png" alt="drawing" width="300"/>
-<img src="./images/cat1_contoured.png" alt="drawing" width="300"/>
+<div align="center">
+    <img src="./images/cat1_boxed.png" alt="drawing" width="300"/>
+    <img src="./images/cat1_contoured.png" alt="drawing" width="300"/>
+</div>
+<div align="center">
+    <img src="./images/cat2_boxed.png" alt="drawing" width="300"/>
+    <img src="./images/cat2_contoured.png" alt="drawing" width="300"/>   
+</div>
 
-<img src="./images/cat2_boxed.png" alt="drawing" width="300"/>
-<img src="./images/cat2_contoured.png" alt="drawing" width="300"/>
+# Citation
+
+SAM repository: https://github.com/facebookresearch/segment-anything
+YOLO repository: https://github.com/ultralytics/ultralytics
