@@ -31,6 +31,10 @@ if __name__ == "__main__":
 
     for image_name in tqdm(os.listdir(images_path)):
         label_name = f"{image_name.split('.')[0]}.txt"
+        
+        if not os.path.exists(os.path.join(labels_path, label_name)):
+            continue
+
         with open(os.path.join(labels_path, label_name)) as f:
             labels = f.readlines()
 
