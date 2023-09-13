@@ -5,13 +5,22 @@ from segment_anything import sam_model_registry, SamPredictor
 
 
 class SamConverter:
-    def __init__(self, sam_weights, sam_type, device, eps=0.01):
+    def __init__(self, sam_weights,
+                  sam_type,
+                  device,
+                  eps=0.01,
+                  is_merge_mask = True,
+                  size_merge_kernel = (32, 32)):
+        
         sam = sam_model_registry[sam_type](checkpoint=sam_weights)
         sam.to(device=device)
 
         self.predictor = SamPredictor(sam)
         self.eps = eps
         self.h, self.w = None, None
+
+        self.is_merge_mask = is_merge_mask
+        self.size_merge_kernel = size_merge_kernel 
 
     def set_image(self, image):
         self.predictor.set_image(image)
@@ -25,16 +34,28 @@ class SamConverter:
         input_box = np.array([cx-bw//2, cy-bh//2, cx+bw//2, cy+bh//2])
         input_point = np.array([[cx, cy]])
         input_label = np.array([1])
-        masks, _, _ = self.predictor.predict(
+        masks, scores, _ = self.predictor.predict(
             point_coords=input_point,
             point_labels=input_label,
             box=input_box,
-            multimask_output=False,
+            multimask_output=True,
         )
+        mask = masks[np.argmax(scores), :, :]
+        return cls, mask
+    
+    def merge_mask(self, mask):
+        kernel = np.ones(self.size_merge_kernel, np.uint8)  
+        mask_3d = np.repeat(mask[:, :, np.newaxis], 3, axis=2).astype(float)
 
-        return cls, masks[0]
+        closed_mask = cv2.morphologyEx(mask_3d, cv2.MORPH_CLOSE, kernel)
+
+        return  closed_mask[:, :, 0]
 
     def mask2segm(self, cls, mask):
+
+        if self.is_merge_mask:
+            mask = self.merge_mask(mask)
+
         thresh = cv2.threshold(mask.astype(float), 0.5, 255, 0)[1].astype(np.uint8)
         cnts = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[0]
         cnt = max(cnts, key=cv2.contourArea)
