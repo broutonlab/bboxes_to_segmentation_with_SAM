@@ -5,7 +5,13 @@ from segment_anything import sam_model_registry, SamPredictor
 
 
 class SamConverter:
-    def __init__(self, sam_weights, sam_type, device, eps=0.01):
+    def __init__(self, sam_weights,
+                  sam_type,
+                  device,
+                  eps=0.01,
+                  is_merge_mask = True,
+                  size_merge_kernel = (32, 32)):
+        
         sam = sam_model_registry[sam_type](checkpoint=sam_weights)
         sam.to(device=device)
 
@@ -13,8 +19,8 @@ class SamConverter:
         self.eps = eps
         self.h, self.w = None, None
 
-        self.is_merge_mask = True
-        self.size_merge_kernel = (32, 32)
+        self.is_merge_mask = is_merge_mask
+        self.size_merge_kernel = size_merge_kernel 
 
     def set_image(self, image):
         self.predictor.set_image(image)
